@@ -79,8 +79,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
+            <groupId>custom.logger</groupId>
+            <artifactId>spring-boot-starter-custom-logger</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+
         </dependency>
     </dependencies>
 

@@ -1,8 +1,8 @@
 package app.service.impl;
 
-import app.aspect.annotation.CustomLogging;
 import app.dto.SingleReceiverRequest;
 import app.service.EmailService;
+import custom.logger.annotation.CustomLogging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

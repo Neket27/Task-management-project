@@ -1,7 +1,6 @@
 package app.service.Impl;
 
 
-import app.controller.advice.annotation.CustomExceptionHandler;
 import app.dto.CreateTaskDto;
 import app.dto.TaskDto;
 import app.dto.UpdateTaskDto;
@@ -13,6 +12,7 @@ import app.kafka.KafkaClientProducer;
 import app.mapper.task.TaskMapper;
 import app.repository.TaskRepository;
 import app.service.TaskService;
+import custom.logger.annotation.CustomLogging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@CustomExceptionHandler
+@CustomLogging
 public class TaskServiceImpl implements TaskService {
 
     @Value("${spring.kafka.producer.topics[0].name}")

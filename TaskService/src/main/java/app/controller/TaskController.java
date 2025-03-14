@@ -1,15 +1,11 @@
 package app.controller;
 
-
 import app.controller.advice.annotation.CustomExceptionHandler;
 import app.dto.CreateTaskDto;
 import app.dto.TaskDto;
 import app.dto.UpdateTaskDto;
-import app.event.TaskUpdatedStatusEvent;
-import app.kafka.KafkaClientProducer;
 import app.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

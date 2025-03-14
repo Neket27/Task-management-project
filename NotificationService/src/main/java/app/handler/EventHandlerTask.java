@@ -1,9 +1,9 @@
 package app.handler;
 
-import app.aspect.annotation.CustomLogging;
 import app.dto.SingleReceiverRequest;
 import app.event.TaskUpdatedStatusEvent;
 import app.service.EmailService;
+import custom.logger.annotation.CustomLogging;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

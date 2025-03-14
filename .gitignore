@@ -29,4 +29,5 @@ replay_pid*
 *.ipr
 
 *.gitattributes
-/Aop/target/
+/target/
+*.env

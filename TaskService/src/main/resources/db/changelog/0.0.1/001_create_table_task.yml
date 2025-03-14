@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_create_task_table
+      author: Nikita Kulga
+      changes:
+        - createTable:
+            tableName: task
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropTable:
+            tableName: task
+
+  - changeSet:
+      id: 002_add_status_column
+      author: Nikita Kulga
+      changes:
+        - addColumn:
+            tableName: task
+            columns:
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+
+  - changeSet:
+      id: 003_rename_table
+      author: Nikita Kulga
+      changes:
+        - renameTable:
+            oldTableName: task
+            newTableName: tasks
+
+      rollback:
+        - dropColumn:
+            tableName: task
+

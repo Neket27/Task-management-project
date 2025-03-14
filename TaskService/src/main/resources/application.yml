@@ -1,0 +1,51 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: Aop
+
+  kafka:
+    producer:
+      enable: true
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: 1
+      idempotence: false
+      topics:
+        - name: task-status-update-event-topic
+          partitions: 2
+          replicas: 1
+          min-insync-replicas: 1
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/aop_db
+    username: aop
+    password: aop
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate.format_sql: true
+      hibernate.type: true
+      hibernate.use_sql_comments: true
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.yml
+    user: aop
+    password: aop
+
+task:
+  limit-downloads: 100
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /ui
+
+
+
+

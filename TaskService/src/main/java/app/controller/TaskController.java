@@ -23,9 +23,6 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
-    private final KafkaClientProducer<TaskUpdatedStatusEvent> kafkaClientProducer;
-    @Value("${spring.kafka.producer.topics[0].name}")
-    private String topic;
 
     @PostMapping()
     public TaskDto create(@RequestBody CreateTaskDto dto) {
@@ -39,15 +36,13 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public TaskDto update(@PathVariable Long id, @RequestBody UpdateTaskDto dto) {
-        TaskDto taskDto = taskService.update(id, dto);
-        kafkaClientProducer.sendTo(topic, new TaskUpdatedStatusEvent(taskDto.id(), taskDto.status()));
-        return taskDto;
+        return taskService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         taskService.remove(id);
-        return HttpStatus.OK;
     }
 
     @GetMapping()

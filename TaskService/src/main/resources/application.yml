@@ -37,9 +37,6 @@ spring:
     user: aop
     password: aop
 
-task:
-  limit-downloads: 100
-
 springdoc:
   api-docs:
     path: /api-docs

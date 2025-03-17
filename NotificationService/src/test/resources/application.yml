@@ -3,20 +3,14 @@ spring:
     name: NotificationService
 
   mail:
-    host: smtp.yandex.ru
-    port: 465
-    username: ${USERNAME} # логин от учётки Yandex
-    password: ${PASSWORD} # специальный пароль для приложения
-    test-connection: true # проверка подключения при старте приложения
+    host: localhost
+    port: 2525
+    username: test
+    password: test
     properties:
-      mail:
-        smtp:
-          auth: true
-          ssl:
-            enable: true
-    sender: # отправитель письма (его почта и имя)
-      email: ${USERNAME}
-      text: no-reply
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
+
 
   kafka:
     consumer:
@@ -38,5 +32,8 @@ spring:
         poll-timeout: 5000 # Установка времени ожидания для опроса
         micrometer-enabled: true # Включение Micrometer
         spring-json-trusted-packages: app.event
+
+        enable:
+          idempotence: true
 
 

@@ -1,54 +1,43 @@
 package app.kafka.config;
 
-import lombok.Getter;
-import lombok.Setter;
+import app.kafka.config.properties.KafkaTopicsProperties;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.config.TopicConfig;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties(prefix = "kafka.producer")
-@Getter
-@Setter
+@RequiredArgsConstructor
 public class KafkaTopicsConfiguration {
 
-    private Map<String, KafkaTopicProperties> topics = new HashMap<>();
+    private final KafkaTopicsProperties prop;
 
     @Bean
     public List<NewTopic> createTopics() {
-        List<NewTopic> topicList = new ArrayList<>();
+        List<NewTopic> topics = new ArrayList<>();
+        List<String> topicNames = prop.getTopics();
 
-        for (Map.Entry<String, KafkaTopicProperties> entry : topics.entrySet()) {
-            String topicName = entry.getKey();
-            KafkaTopicProperties props = entry.getValue();
+        if (topicNames != null) {
+            for (String topicName : topicNames) {
+                KafkaTopicsProperties.TopicConfig config = prop.getTopicsConfig().get(topicName);
 
-            NewTopic topic = TopicBuilder
-                    .name(topicName)
-                    .partitions(props.getPartitions())
-                    .replicas(props.getReplicas())
-                    .configs(Map.of(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, String.valueOf(props.getMinInsyncReplicas())))
-                    .build();
+                NewTopic topic = TopicBuilder
+                        .name(topicName)
+                        .partitions(config.getPartitions())
+                        .replicas(config.getPartitions())
+                        .configs(Map.of(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, config.getMinInsyncReplicas()))
+                        .build();
 
-            topicList.add(topic);
+                topics.add(topic);
+            }
         }
-
-        return topicList;
+        return topics;
     }
 
-    @Getter
-    @Setter
-    public static class KafkaTopicProperties {
-        private int partitions = 1;
-        private int replicas = 1;
-        private int minInsyncReplicas = 1;
-    }
 }
-

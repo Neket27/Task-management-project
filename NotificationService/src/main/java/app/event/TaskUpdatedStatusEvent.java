@@ -1,6 +1,8 @@
 package app.event;
 
+import app.entity.Status;
+
 public record TaskUpdatedStatusEvent(
         Long taskId,
-        String status
-) {}
+        Status status
+){}

@@ -21,6 +21,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public TaskDto create(@RequestBody CreateTaskDto dto) {
         return taskService.create(dto);
     }
@@ -31,6 +32,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public TaskDto update(@PathVariable Long id, @RequestBody UpdateTaskDto dto) {
         return taskService.update(id, dto);
     }
@@ -44,7 +46,7 @@ public class TaskController {
     @GetMapping()
     public List<TaskDto> list(@RequestParam(required = false, defaultValue = "0") int page,
                               @RequestParam(required = false, defaultValue = "100") int size) {
-        return taskService.getList(PageRequest.of(page,size));
+        return taskService.getList(PageRequest.of(page, size));
     }
 
 }

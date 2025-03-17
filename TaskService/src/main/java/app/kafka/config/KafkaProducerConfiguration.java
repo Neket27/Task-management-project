@@ -2,12 +2,11 @@ package app.kafka.config;
 
 import app.event.TaskUpdatedStatusEvent;
 import app.kafka.KafkaClientProducer;
-import lombok.Getter;
-import lombok.Setter;
+import app.kafka.config.properties.KafkaProducerProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -19,25 +18,18 @@ import java.util.Map;
 
 @Configuration
 @Slf4j
-@ConfigurationProperties(prefix = "spring.kafka.producer")
-@Getter
-@Setter
+@RequiredArgsConstructor
 public class KafkaProducerConfiguration {
 
-    private String bootstrapServers;
-    private String keySerializer;
-    private String valueSerializer;
-    private boolean idempotence;
-    private String acks;
-    private boolean enable = true; // Значение по умолчанию
+    private final KafkaProducerProperties prop;
 
     private Map<String, Object> producerConfig() {
         Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
-        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, idempotence);
-        config.put(ProducerConfig.ACKS_CONFIG, acks);
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, prop.getBootstrapServers());
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, prop.getKeySerializer());
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, prop.getValueSerializer());
+        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, prop.isIdempotence());
+        config.put(ProducerConfig.ACKS_CONFIG, prop.getAcks());
         return config;
     }
 

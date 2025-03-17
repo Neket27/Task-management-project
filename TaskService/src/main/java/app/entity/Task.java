@@ -1,6 +1,5 @@
 package app.entity;
 
-import app.entity.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,4 +23,5 @@ public class Task {
     private Status status;
     @Column(name = "user_id")
     private Long userId;
+
 }

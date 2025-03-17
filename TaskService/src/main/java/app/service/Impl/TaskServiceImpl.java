@@ -28,7 +28,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Value("${spring.kafka.producer.topics[0].name}")
     private String topic;
-
     private final KafkaClientProducer<TaskUpdatedStatusEvent> kafkaClientProducer;
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
@@ -46,14 +45,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskDto getById(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new NotFoundException(Task.class, id));
-        return taskMapper.toDto(task);
+        return taskMapper.toDto(findById(id));
     }
 
     @Override
     @Transactional
     public TaskDto update(Long id, UpdateTaskDto dto) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new NotFoundException(Task.class, id));
+        Task task = findById(id);
         Task taskFromDto = taskMapper.toEntity(id, dto);
 
         taskMapper.update(task, taskFromDto);
@@ -82,5 +80,8 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(tasks);
     }
 
+    private Task findById(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new NotFoundException(Task.class, id));
+    }
 
 }

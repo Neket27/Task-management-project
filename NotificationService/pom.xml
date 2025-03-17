@@ -20,9 +20,8 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
-        <springdoc.version>2.2.0</springdoc.version>
         <spring-boot-starter-mail>3.4.3</spring-boot-starter-mail>
-        <springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
+        <testcontainers.version>1.19.8</testcontainers.version>
     </properties>
     <dependencies>
         <dependency>
@@ -61,26 +60,26 @@
             <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!--Documents-->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-common</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>custom.logger</groupId>
+            <artifactId>spring-boot-starter-custom-logger</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

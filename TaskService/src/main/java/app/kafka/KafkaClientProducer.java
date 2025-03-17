@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class KafkaClientProducer<V> {
 
-    private final KafkaTemplate<java.lang.String, V> kafkaTemplate;
+    private final KafkaTemplate<String, V> kafkaTemplate;
 
     public void sendTo(String topic, V message) {
         String idMessage = UUID.randomUUID().toString();

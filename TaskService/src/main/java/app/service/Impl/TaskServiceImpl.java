@@ -1,19 +1,20 @@
 package app.service.Impl;
 
 
-import app.controller.advice.annotation.CustomExceptionHandler;
 import app.dto.CreateTaskDto;
 import app.dto.TaskDto;
 import app.dto.UpdateTaskDto;
 import app.entity.Status;
 import app.entity.Task;
+import app.event.TaskUpdatedStatusEvent;
 import app.exception.NotFoundException;
+import app.kafka.KafkaClientProducer;
 import app.mapper.task.TaskMapper;
 import app.repository.TaskRepository;
 import app.service.TaskService;
+import custom.logger.annotation.CustomLogging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +23,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@CustomExceptionHandler
+@CustomLogging
 public class TaskServiceImpl implements TaskService {
 
-    @Value("${task.limit-downloads}")
-    private Integer limit;
-
+    @Value("${spring.kafka.producer.topics[0].name}")
+    private String topic;
+    private final KafkaClientProducer<TaskUpdatedStatusEvent> kafkaClientProducer;
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
@@ -44,18 +45,19 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskDto getById(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new NotFoundException(Task.class, id));
-        return taskMapper.toDto(task);
+        return taskMapper.toDto(findById(id));
     }
 
     @Override
     @Transactional
     public TaskDto update(Long id, UpdateTaskDto dto) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new NotFoundException(Task.class, id));
+        Task task = findById(id);
         Task taskFromDto = taskMapper.toEntity(id, dto);
 
         taskMapper.update(task, taskFromDto);
         taskRepository.save(task);
+
+        kafkaClientProducer.sendTo(topic, new TaskUpdatedStatusEvent(task.getId(), task.getStatus()));
 
         return taskMapper.toDto(task);
     }
@@ -78,5 +80,8 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(tasks);
     }
 
+    private Task findById(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new NotFoundException(Task.class, id));
+    }
 
 }
